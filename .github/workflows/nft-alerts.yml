@@ -2,8 +2,10 @@ name: nft freemint alerts
 
 on:
   schedule:
-    # setiap 5 menit (datt.my refresh tiap 10 menit; nftcalendar update beberapa kali per jam)
+    # Jaring: empat jalur cron berbeda agar delay antrean kecil kemungkinannya menumpuk
     - cron: '*/5 * * * *'
+    - cron: '3,18,33,48 * * * *'
+    - cron: '7,22,37,52 * * * *'
   workflow_dispatch: {}
 
 # hindari dua run berjalan bersamaan & merusak state.json
