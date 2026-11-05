@@ -1,0 +1,46 @@
+name: nft freemint alerts
+
+on:
+  schedule:
+    # setiap 5 menit (datt.my refresh tiap 10 menit; nftcalendar update beberapa kali per jam)
+    - cron: '*/5 * * * *'
+  workflow_dispatch: {}
+
+# hindari dua run berjalan bersamaan & merusak state.json
+concurrency:
+  group: nft-alerts
+  cancel-in-progress: false
+
+permissions:
+  contents: write # untuk commit state.json kembali ke repo
+
+jobs:
+  poll:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Poll sources & send alerts
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: node bot.js --once
+
+      - name: Persist state
+        run: |
+          git config user.name "nft-alerts-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add state.json
+          if git diff --cached --quiet; then
+            echo "tidak ada perubahan state"
+          else
+            git commit -m "state update [skip ci]"
+            git pull --rebase --autostash origin ${{ github.ref_name }} || true
+            git push origin HEAD:${{ github.ref_name }}
+          fi

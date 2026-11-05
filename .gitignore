@@ -1,0 +1,4 @@
+secrets.env
+bot.log
+bot.pid
+node_modules/

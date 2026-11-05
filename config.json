@@ -1,0 +1,17 @@
+{
+  "webhookUrl": "",
+  "datt": {
+    "enabled": true,
+    "intervalMs": 60000,
+    "indexUrl": "https://datt.my/data/kontrak/index.json",
+    "detailUrl": "https://datt.my/data/kontrak/{address}.json",
+    "pageUrl": "https://datt.my/c/{address}/"
+  },
+  "nftcalendar": {
+    "enabled": true,
+    "intervalMs": 300000,
+    "tagUrl": "https://nftcalendar.io/tag/freemint/",
+    "jinaProxy": "https://r.jina.ai/",
+    "detailDelayMs": 5000
+  }
+}
