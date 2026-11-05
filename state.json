@@ -13,7 +13,6 @@
   "0xf1968d3f690b2327afef1b8aa87a4fe9e1090591": 1793856252331,
   "0x08b1a979dd997492eecc010fe986ea2e2925e620": 1793856252331,
   "0x0ac608c189338f732e856e5b59a09c8256cc89c8": 1793856252331,
-  "0x273fc2c7705b23eb129e35ac8da26348e6fc4980": 1793856252331,
   "0x65c89bd01a03b9b9b73ed29d3b3af8d2eb034dfc": 1793856252331,
   "0xfd8d2e77c8ac50b2b75924ba528321b3cf6de87b": 1793856252331,
   "0x01d0f3b16c89615c924007ae85779b55a22552d0": 1793856252331,
@@ -2371,14 +2370,15 @@
   "0x2ed9e0a6992ba22b48c2fc2def6bb2365301a0d0": 1793856252342,
   "0x1c7d064e6ebe9b7c1e7eeac401e74c3b7c8f7777": 1793856252342,
   "0x19758609b4b1885b02ba64c0beadb436503cfcae": 1793856252342,
-  "0x924b1c9203ebc3ee3d4fd2af758b2dbdd3856e0c": 1793856361756
+  "0x924b1c9203ebc3ee3d4fd2af758b2dbdd3856e0c": 1793856361756,
+  "0xc97cdd183bc61bdfcf00d97284e7bdd707cb0a90": 1793858067156,
+  "0x273fc2c7705b23eb129e35ac8da26348e6fc4980": 1793858067156
  },
  "nc": {
   "https://nftcalendar.io/event/silicon-gardens/": 1793856253974,
   "https://nftcalendar.io/event/jacks-crew-free-ha/": 1793856253974,
   "https://nftcalendar.io/event/koai-genesis-nft-f/": 1793856253974,
   "https://nftcalendar.io/event/agentic-pixels/": 1793856253974,
-  "https://nftcalendar.io/event/holo-cats/": 1793856253974,
   "https://nftcalendar.io/event/chyai-agent-credenti/": 1793856253974,
   "https://nftcalendar.io/event/black-hole-2/": 1793856253974,
   "https://nftcalendar.io/event/pocket-dragons/": 1793856253974,
@@ -2404,9 +2404,11 @@
   "https://nftcalendar.io/event/arcade-tarot-card-nf/": 1793856253974,
   "https://nftcalendar.io/event/imnftio-imagemake/": 1793856253974,
   "https://nftcalendar.io/event/mozhu-3000-agen/": 1793856353453,
-  "https://nftcalendar.io/event/limitless/": 1793856961166
+  "https://nftcalendar.io/event/limitless/": 1793856961166,
+  "https://nftcalendar.io/event/holo-cats/": 1793858073724
  },
  "started": 1793856249975,
  "dattWarmed": true,
- "ncWarmed": true
+ "ncWarmed": true,
+ "postedStatus": true
 }

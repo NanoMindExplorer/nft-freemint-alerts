@@ -50,7 +50,11 @@ const LABEL_COLORS = {
 };
 
 function fmtTs(unix) {
-  return Math.floor(unix) ? `<t:${Math.floor(unix)}:R>` : null;
+  return Math.floor(unix) ? `<t:${Math.floor(unix)}:F>` : null;
+}
+
+function fmtRel(unix) {
+  return `<t:${Math.floor(unix)}:R>`;
 }
 
 async function postDiscord(payload) {
@@ -123,9 +127,7 @@ async function pollDatt() {
     }
 
     // kontrak benar-benar baru -> ambil detail lalu blast
-    const toAnnounce = fresh
-      .filter((c) => Date.now() - state.started > 90 * 1000 || true)
-      .slice(0, 6);
+    const toAnnounce = fresh.slice(0, 6);
     for (const c of toAnnounce) {
       const addr = c.address.toLowerCase();
       let detail = null;
@@ -148,12 +150,22 @@ async function pollDatt() {
         .map((f) => `• **${f.code}**${f.function ? ` (\`${f.function}()\`)` : ''} — ${FINDING_TEXT[f.code] || f.text || ''}`)
         .join('\n');
 
+      const verdict =
+        label === 'merah'
+          ? '⚠️ **Hati-hati**: kontrak berisiko. Jangan bayar apa pun sebelum membaca source-nya sendiri.'
+          : label === 'kuning'
+            ? '🟡 Relatif normal untuk kebanyakan mint — cek fungsi owner yang tercantum sebelum bayar.'
+            : label === 'hijau'
+              ? '🟢 Tidak ada fungsi istimewa di source verified — tetap bukan jaminan; cek harga & supply sendiri.'
+              : null;
+
       const fields = [
         { name: 'Chain', value: (detail?.chain || 'bsc').toUpperCase(), inline: true },
         { name: 'Label', value: `${labelIcon} ${label || 'unknown'}`, inline: true },
-        { name: 'Contract', value: '**' + addr + '**', inline: false },
+        { name: 'Diperiksa', value: detail?.checked_at ? fmtTs(detail.checked_at) : '—', inline: true },
+        { name: 'Kontrak', value: '`' + addr + '`', inline: false },
       ];
-      if (findingLines) fields.push({ name: 'Temuan MintRadar', value: findingLines, inline: false });
+      if (findingLines) fields.push({ name: 'Temuan', value: findingLines, inline: false });
       if (Array.isArray(detail?.privileged_functions) && detail.privileged_functions.length)
         fields.push({
           name: 'Fungsi Istimewa',
@@ -161,28 +173,30 @@ async function pollDatt() {
           inline: false,
         });
 
+      const links = [
+        `[Buka di MintRadar](${CFG.datt.pageUrl.replace('{address}', addr)})`,
+        detail?.source ? `[Source (Sourcify)](${detail.source})` : null,
+        `[BscScan](https://bscscan.com/address/${addr})`,
+      ]
+        .filter(Boolean)
+        .join(' • ');
+
       const embed = {
-        title: `${labelIcon} Mint baru terdeteksi: ${name}`,
+        title: `${labelIcon} ${name}`,
         url: CFG.datt.pageUrl.replace('{address}', addr),
         color,
+        description: [verdict, links].filter(Boolean).join('\n\n'),
         fields,
-        footer: { text: `MintRadar (datt.my) • radar mint BNB Chain • ${new Date().toUTCString()}` },
+        footer: { text: 'MintRadar • datt.my • radar mint BNB Chain' },
         timestamp: new Date().toISOString(),
       };
-      if (detail?.checked_at) {
-        embed.fields.push({
-          name: 'Diperiksa',
-          value: fmtTs(detail.checked_at),
-          inline: true,
-        });
-      }
       await postDiscord({ embeds: [embed], username: 'MintRadar Alerts' });
       log(`datt: announced ${addr} (${label})`);
       await sleep(1500);
     }
     if (fresh.length > 6) {
       await postDiscord({
-        content: `⚠️ ${fresh.length - 6} kontrak lain tiba dalam satu batch awal, tidak dikirim satu-per-satu.`,
+        content: `🎯 ${fresh.length} mint baru berdetak di radar sekaligus — ${fresh.slice(0, 8).map((c) => `[${(c.name || 'unnamed').slice(0, 24)}](https://datt.my/c/${c.address.toLowerCase()}/)`).join(', ')}${fresh.length > 8 ? ' …' : ''}`,
         username: 'MintRadar Alerts',
       });
     }
@@ -244,6 +258,21 @@ async function fetchViaProxy(url) {
   return null;
 }
 
+const NC_MONTHS = { Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5, Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11 };
+
+function parseNcDateRange(s) {
+  if (!s) return null;
+  const rx = /(\w{3}) (\d{1,2}), (\d{4})/g;
+  const parts = [...s.matchAll(rx)].map((m) => {
+    const t = Date.UTC(+m[3], NC_MONTHS[m[1] in NC_MONTHS ? m[1] : 'Jan'], +m[2], 0, 0, 0) / 1000;
+    return Math.floor(t);
+  });
+  if (!parts.length) return null;
+  const start = Math.min(...parts);
+  const end = Math.max(...parts) + 86399;
+  return { start, end };
+}
+
 async function announceNcEvent(ev, withDetail) {
   let chain = null;
   let marketplace = null;
@@ -268,19 +297,33 @@ async function announceNcEvent(ev, withDetail) {
       }
     }
   }
+  const rng = parseNcDateRange(ev.date);
+  const now = Math.floor(Date.now() / 1000);
+  const fields = [
+    {
+      name: 'Konteks waktu',
+      value: rng
+        ? rng.start > now
+          ? `Mulai ${fmtTs(rng.start)} (${fmtRel(rng.start)}), berakhir ${fmtTs(rng.end)}`
+          : rng.end < now
+            ? `Sudah berakhir — ${fmtTs(rng.end)} (seulement arsip)`
+            : `**Berjalan sekarang** \u2014 berakhir ${fmtRel(rng.end)} (${fmtTs(rng.end)})`
+        : ev.date || '\u2014',
+      inline: false,
+    },
+  ];
   const embed = {
     title: `\u{1F4A5} Freemint NFT baru: ${ev.title}`,
     url: ev.url,
     color: 0x00b0f4,
-    fields: [
-      { name: 'Rentang Drop', value: ev.date || '—', inline: false },
-    ],
-    footer: { text: 'NFT Calendar • tag #freemint' },
+    fields,
+    footer: { text: 'NFT Calendar \u2022 tag #freemint' },
     timestamp: new Date().toISOString(),
   };
-  if (chain) embed.fields.push({ name: 'Blockchain', value: chain, inline: true });
-  if (marketplace) embed.fields.push({ name: 'Marketplace', value: marketplace, inline: true });
-  if (shortDesc) embed.description = shortDesc.slice(0, 450) || undefined;
+  if (chain) fields.push({ name: 'Blockchain', value: chain, inline: true });
+  if (marketplace) fields.push({ name: 'Marketplace', value: marketplace, inline: true });
+  const links = `[Laman drop](${ev.url})`;
+  embed.description = [shortDesc ? shortDesc.slice(0, 400) : null, links].filter(Boolean).join('\n\n') || undefined;
   if (ev.image) embed.image = { url: ev.image };
   await postDiscord({ embeds: [embed], username: 'Freemint Alerts' });
   log(`nc: announced ${ev.title} -> ${ev.url}`);
@@ -298,12 +341,9 @@ async function pollNftCalendar() {
 
   if (!state.ncWarmed) {
     state.ncWarmed = true;
-    let stamped = 0;
-    for (const e of events) state.nc[e.url] = Date.now(), stamped++;
+    for (const e of events) state.nc[e.url] = Date.now();
     saveState();
-    log(`nc: seeded ${stamped} existing events, no backfill spam`);
-    // contoh: kirim 1 event teratas sebagai sampel startup
-    if (events[0]) await announceNcEvent(events[0], false);
+    log(`nc: seeded ${events.length} existing events, no backfill spam`);
     return;
   }
   saveState();
@@ -318,9 +358,41 @@ async function pollNftCalendar() {
 
   if (fresh.length > 5)
     await postDiscord({
-      content: `+${fresh.length - 5} drop freemint lain baru masuk di <https://nftcalendar.io/tag/freemint/> (${fresh.slice(5).map((e) => e.title).join(', ')})`,
+      content: `🎯 +${fresh.length - 5} drop freemint lain di <https://nftcalendar.io/tag/freemint/> — ${fresh.slice(5).map((e) => `[${e.title}](${e.url})`).join(', ')}`,
       username: 'Freemint Alerts',
     });
+}
+
+// ---------------- status (sekali, permanen) ----------------
+
+async function postStartupStatus() {
+  if (state.postedStatus || !CFG.webhookUrl) return;
+  state.postedStatus = true;
+  saveState();
+  const mode = ONCE ? 'GitHub Actions (cron */5)' : 'daemon lokal';
+  const dattCount = Object.keys(state.datt).length;
+  const ncCount = Object.keys(state.nc).length;
+  const embed = {
+    title: '📡 Monitor Freemint aktif',
+    color: 0x5865F2,
+    fields: [
+      {
+        name: 'Sumber 1 — MintRadar (datt.my)',
+        value: `${dattCount} kontrak mint BNB Chain terpantau\n${mode === 'daemon lokal' ? 'Frekuensi: 60 detik' : 'Frekuensi: tiap siklus cron */5'}`,
+        inline: false,
+      },
+      {
+        name: 'Sumber 2 — NFT Calendar',
+        value: `${ncCount} drop pada tag #freemint terpantau\nFrekuensi: 5 menit`,
+        inline: false,
+      },
+    ],
+    description: '\ud83d\udccc *Semua item lama di-"seed" sebagai baseline — tidak diborong. Mulai sekarang, hanya kontrak & drop **BARU** yang diumumkan di sini.*',
+    footer: { text: 'nft-alerts' },
+    timestamp: new Date().toISOString(),
+  };
+  await postDiscord({ embeds: [embed], username: 'Freemint Alerts' });
+  log('startup status posted');
 }
 
 // ---------------- main ----------------
@@ -332,20 +404,13 @@ async function main() {
   if (ONCE) {
     if (CFG.datt.enabled) await pollDatt();
     if (CFG.nftcalendar.enabled) await pollNftCalendar();
+    await postStartupStatus();
     saveState();
     log('once-mode done');
     return;
   }
 
-  await postDiscord({
-    content: [
-      '\u{1F4E1} **Monitor freemint aktif**',
-      `• datt.my (MintRadar) — radar mint BNB Chain, cek tiap ${CFG.datt.intervalMs / 1000}s`,
-      `• nftcalendar.io tag #freemint — cek tiap ${CFG.nftcalendar.intervalMs / 60000} menit`,
-      '_Event lama di-seed sebagai baseline (tidak diborong); hanya drop/kontrak BARU yang diumumkan._',
-    ].join('\n'),
-    username: 'Freemint Alerts',
-  });
+  await postStartupStatus();
 
   const dattLoop = async () => {
     for (;;) {
