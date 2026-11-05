@@ -18,7 +18,17 @@ Monitor realtime yang mengirim peringatan mint NFT dari dua sumber ke webhook Di
    - nftcalendar.io: judul, rentang tanggal drop, blockchain & marketplace (dari detail), cuplikan deskripsi, gambar banner, tautan event.
 4. Rate-limit Discord (429) ditangani dengan retry Sesuai `retry_after`. Error jaringan di-retry dengan backoff.
 
-## Operasi (Termux/proot)
+## Operasi
+
+### GitHub Actions (jalur utama, repo public + cron `*/5`)
+
+- Workflow: `.github/workflows/nft-alerts.yml` — tiap 5 menit: `node bot.js --once` (satu siklus poll), lalu `state.json` di-commit lagi ke repo sebagai memori bank antar-run. Dedup dijamin lintas-run.
+- Webhook berada di GitHub Secret `DISCORD_WEBHOOK_URL` (tidak ada di dalam file apa pun).
+- Repo public = menit Actions gratis untuk standard runner.
+- **Catatan delay**: cron Actions adalah best-effort (~5–15 menit), bukan realtime absolut.
+- Tips: skedul bisa nonaktif otomatis setelah 60 hari tampak "tidak aktif" — apabila kosong, jalankan `gh workflow run "nft freemint alerts"` sekali untuk menghidupkannya kembali (`workflow_dispatch`).
+
+### Daemon lokal (opsional, paling realtime datt.my: 60 detik)
 
 ```bash
 bash /root/nft-alerts/start.sh   # mulai (supervisor auto-restart)
@@ -26,12 +36,13 @@ bash /root/nft-alerts/stop.sh    # hentikan
 tail -f /root/nft-alerts/bot.log # log
 ```
 
-Sebagai layanan resmi (VM/VPS Ubuntu asli dengan systemd):
-`/etc/systemd/system/nft-alerts.service` sudah dibuat —
-`systemctl daemon-reload && systemctl enable --now nft-alerts`.
+Hidupkan CHUKA SATU jalur saja. Lokal, state.json tidak di-sync — bila daemon dan Actions berjalan bersamaan dua sumber bisa mengumumkan hal yang sama.
+
+USB/VM asli Ubuntu + systemd: `/etc/systemd/system/nft-alerts.service` telah dibuat → `systemctl daemon-reload && systemctl enable --now nft-alerts`.
 
 ## Konfigurasi
 
-- `config.json` — webhook URL, interval, endpoint.
-- `state.json` — baseline dedup. Hapus file ini + `state.dattWarmed`/`ncWarmed` akan reset, lalu semua data saat itu dianggap baseline.
-- `bot.js` — kirim ke Discord, dua loop paralel (datt + nftcalendar).
+- `config.json` — endpoint, interval (webhook **tidak** disimpan di sini).
+- `secrets.env` (gitignored) — `DISCORD_WEBHOOK_URL` untuk local run.
+- `state.json` — baseline dedup; pada CI, file ini dipulihkan berulang tiap siklus.
+- `bot.js` — `--once` untuk satu siklus (dipakai CI), default daemon loop.
