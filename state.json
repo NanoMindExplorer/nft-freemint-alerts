@@ -2569,7 +2569,13 @@
   "0x25256ee137d4b2b9d440431ae8fc8fd9770c50a9": 1794150070380,
   "0x26e009350ef80cb542785d57c27c686a582bf605": 1794150070380,
   "0xef4fa905b107a431fcaeb50f1183b712dc3eb9d6": 1794150070380,
-  "0x152f4704ed0a0aa1514952a06cf9f36cb4caf088": 1794153228698
+  "0x152f4704ed0a0aa1514952a06cf9f36cb4caf088": 1794153228698,
+  "0x625188954784d2f8c542fe8206050ff540ae3b20": 1794163827738,
+  "0xaa87b6b3ecdd3202a80d109a91e88783fffb0be6": 1794163827738,
+  "0x9c6a008f73a1d1941f4763b88c6ee8c8e4ef8b0a": 1794163827738,
+  "0x7f00b3aa3a3e41dc145180c4ed8a24ee568eaed4": 1794163827738,
+  "0x8ea465abd41aec8b6f1bd80a7c6c37d3ae85529c": 1794163827738,
+  "0xcaa6554463a98f9afc966175694cd81ac7c41b41": 1794163827738
  },
  "nc": {
   "https://nftcalendar.io/event/silicon-gardens/": 1793856253974,
@@ -2604,7 +2610,9 @@
   "https://nftcalendar.io/event/limitless/": 1793856961166,
   "https://nftcalendar.io/event/holo-cats/": 1793858073724,
   "https://nftcalendar.io/event/knights-of-the-agent/": 1794153232198,
-  "https://nftcalendar.io/event/agent-card-studio/": 1794153238965
+  "https://nftcalendar.io/event/agent-card-studio/": 1794153238965,
+  "https://nftcalendar.io/event/tampesta/": 1794163841181,
+  "https://nftcalendar.io/event/thalvorix-free-hero/": 1794163847909
  },
  "started": 1793856249975,
  "dattWarmed": true,
