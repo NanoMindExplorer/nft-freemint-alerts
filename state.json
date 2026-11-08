@@ -2568,7 +2568,8 @@
   "0x7cd1c2a0ee1db8bb3ce82270ec2610be74a1285d": 1794150070380,
   "0x25256ee137d4b2b9d440431ae8fc8fd9770c50a9": 1794150070380,
   "0x26e009350ef80cb542785d57c27c686a582bf605": 1794150070380,
-  "0xef4fa905b107a431fcaeb50f1183b712dc3eb9d6": 1794150070380
+  "0xef4fa905b107a431fcaeb50f1183b712dc3eb9d6": 1794150070380,
+  "0x152f4704ed0a0aa1514952a06cf9f36cb4caf088": 1794153228698
  },
  "nc": {
   "https://nftcalendar.io/event/silicon-gardens/": 1793856253974,
@@ -2601,7 +2602,9 @@
   "https://nftcalendar.io/event/imnftio-imagemake/": 1793856253974,
   "https://nftcalendar.io/event/mozhu-3000-agen/": 1793856353453,
   "https://nftcalendar.io/event/limitless/": 1793856961166,
-  "https://nftcalendar.io/event/holo-cats/": 1793858073724
+  "https://nftcalendar.io/event/holo-cats/": 1793858073724,
+  "https://nftcalendar.io/event/knights-of-the-agent/": 1794153232198,
+  "https://nftcalendar.io/event/agent-card-studio/": 1794153238965
  },
  "started": 1793856249975,
  "dattWarmed": true,
