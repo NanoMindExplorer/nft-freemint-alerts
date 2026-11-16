@@ -2983,7 +2983,9 @@
   "0xe233d131e0b2567d5cedd5259cc2c1b73cf20a9d": 1794817983892,
   "0x595b58497b0521af473aef78f4518928b781c869": 1794817983892,
   "0x0efbc02cbe34579dd7f174092c2023ad4a569d9e": 1794817983892,
-  "0x8a7be94d1c36a60bcdd155d37faf84403b8a26ae": 1794817983892
+  "0x8a7be94d1c36a60bcdd155d37faf84403b8a26ae": 1794817983892,
+  "0xb37fb29644e5c7c7d3e554aa2b0bbae6dd7970c5": 1794826756870,
+  "0xfccafa4cf8e5f6027b8fb7e3940fcffff944c90c": 1794826756870
  },
  "nc": {
   "https://nftcalendar.io/event/silicon-gardens/": 1793856253974,
@@ -3021,7 +3023,8 @@
   "https://nftcalendar.io/event/agent-card-studio/": 1794153238965,
   "https://nftcalendar.io/event/tampesta/": 1794163841181,
   "https://nftcalendar.io/event/thalvorix-free-hero/": 1794163847909,
-  "https://nftcalendar.io/event/time-cards/": 1794413913560
+  "https://nftcalendar.io/event/time-cards/": 1794413913560,
+  "https://nftcalendar.io/event/pacture-nft/": 1794826762979
  },
  "started": 1793856249975,
  "dattWarmed": true,
