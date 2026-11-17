@@ -3012,7 +3012,12 @@
   "0xdc167f998341aa37d734de94db2108f0983bf2a7": 1794911964533,
   "0xf91b1ebbcb2b038107ed10b4cb163ed51ce39037": 1794911964533,
   "0x1fccfab61461c4b5c4d1b16580d12a7e32012baa": 1794911964533,
-  "0x94bd501f3d2bb5ef205a63c74d7995916830bc96": 1794918687262
+  "0x94bd501f3d2bb5ef205a63c74d7995916830bc96": 1794918687262,
+  "0xc6d38bc5d854fda20bd4473e9f3d0486747c178c": 1794937834109,
+  "0x26441dafe9b256345a2859c28c91e24611ed424a": 1794937834109,
+  "0xc442e8ba26b9e5088d1d70dc8edfcde4d2e911b0": 1794937834109,
+  "0xba7068233da805bdebcc167be361c219002e6b7f": 1794937834109,
+  "0xdaba96c14b38725b23502be6dfe021c08b7a5fb1": 1794937834109
  },
  "nc": {
   "https://nftcalendar.io/event/silicon-gardens/": 1793856253974,
@@ -3052,7 +3057,8 @@
   "https://nftcalendar.io/event/thalvorix-free-hero/": 1794163847909,
   "https://nftcalendar.io/event/time-cards/": 1794413913560,
   "https://nftcalendar.io/event/pacture-nft/": 1794826762979,
-  "https://nftcalendar.io/event/first-dollar-sparks/": 1794846652895
+  "https://nftcalendar.io/event/first-dollar-sparks/": 1794846652895,
+  "https://nftcalendar.io/event/hood-havoc/": 1794937847315
  },
  "started": 1793856249975,
  "dattWarmed": true,
