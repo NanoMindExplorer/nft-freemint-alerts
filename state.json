@@ -3026,7 +3026,13 @@
   "0x7df7fd03bd5b7a024b1341849aad14758f12a4a8": 1794985962361,
   "0x6a3e0366222271030596cf1d98fc61a309be1df8": 1794985962361,
   "0x9b0c237a123277fcf8768550bbdd7767c73cf5d3": 1795001237134,
-  "0xfe4e0b3ab48bb988793f42ac90bec42da706958d": 1795001237134
+  "0xfe4e0b3ab48bb988793f42ac90bec42da706958d": 1795001237134,
+  "0x26ad277193ff31bd086a47bf7b1d25a93573c989": 1795019567184,
+  "0x25e75fd717c80bd90db6c980637a3eb993f0ed4a": 1795019567184,
+  "0xfcadfb7cc85b6ea540d64e4f4b9f162e630f55c0": 1795019567184,
+  "0xbcdd900857e5d8cc87c45764e61373ca1992e4d4": 1795019567184,
+  "0x5b63bd45e61a2e6540548c3509b598b6384206c5": 1795019567184,
+  "0x42c9ed912025df33ca1676aad4651cdded3f09ed": 1795019567184
  },
  "nc": {
   "https://nftcalendar.io/event/silicon-gardens/": 1793856253974,
@@ -3067,7 +3073,8 @@
   "https://nftcalendar.io/event/time-cards/": 1794413913560,
   "https://nftcalendar.io/event/pacture-nft/": 1794826762979,
   "https://nftcalendar.io/event/first-dollar-sparks/": 1794846652895,
-  "https://nftcalendar.io/event/hood-havoc/": 1794937847315
+  "https://nftcalendar.io/event/hood-havoc/": 1794937847315,
+  "https://nftcalendar.io/event/kageveil-genesis-9/": 1795019582703
  },
  "started": 1793856249975,
  "dattWarmed": true,
